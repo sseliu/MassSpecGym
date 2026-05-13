@@ -58,6 +58,11 @@ class ChemEmbedMolTransform(MolTransform):
 
         sentence = MolSentence(mol2alt_sentence(mol, radius=1))
         vec = sentences2vec([sentence], self.model)[0]
+
+        #  returns zeros when no substructure is in the mol2vec vocabulary
+        if not isinstance(vec, np.ndarray) or vec.shape != (300,):
+            return np.zeros(300, dtype=np.float32)
+    
         return vec.astype(np.float32)  # numpy array shape (300,)
 
     # def from_smiles(self, smiles: str):
